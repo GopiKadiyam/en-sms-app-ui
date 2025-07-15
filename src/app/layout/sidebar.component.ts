@@ -5,6 +5,9 @@ import { CommonModule } from '@angular/common';
 import { ThemeService } from '../core/theme.service';
 import { inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from '../auth/auth.service';
+import { ConfirmDialogComponent } from '../shared/confirm-dialog.component';
 // Types for navigation
 export type NavType = 'normal' | 'section' | 'group' | 'divider' | 'external' | 'badge' | 'custom' | 'submenu' | 'disabled' | 'linkWithAction';
 
@@ -26,7 +29,7 @@ export interface NavItem {
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, LucideAngularModule, CommonModule,FormsModule],
+  imports: [RouterLink, RouterLinkActive, LucideAngularModule, CommonModule,FormsModule, ConfirmDialogComponent],
   template: `
     <!-- Hamburger for mobile -->
     <button
@@ -286,6 +289,7 @@ export interface NavItem {
           <button class="flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded bg-red-600 hover:bg-red-700 text-white transition"
             title="Logout"
             aria-label="Logout"
+            (click)="logout()"
           >
             <lucide-icon [name]="LogOut" class="w-5 h-5 text-white" />
             <span *ngIf="!collapsed && !isMobile" class="text-xs text-white">Logout</span>
@@ -294,6 +298,15 @@ export interface NavItem {
         </div>
       </div>
     </aside>
+    <ui-confirm-dialog
+      *ngIf="showLogoutConfirm"
+      [title]="'Are you sure you want to log out?'"
+      [message]="'Log out of EngageNest as ' + (user.email || 'this account') + '?'"
+      confirmText="Log out"
+      cancelText="Cancel"
+      (confirm)="confirmLogout()"
+      (cancel)="showLogoutConfirm = false"
+    />
   `,
   styles: [
     `.active-nav {
@@ -320,6 +333,7 @@ export class SidebarComponent {
   isDark = false;
   isMobile = false;
   notificationCount = 3; // Example badge count
+  showLogoutConfirm = false;
 
   readonly Home = Home;
   readonly Users = Users;
@@ -427,9 +441,15 @@ export class SidebarComponent {
     localStorage.setItem('theme', this.isDark ? 'dark' : 'light');
   }
 
+  constructor(private auth: AuthService, private router: Router) {}
+
   logout() {
-    // Implement logout logic here
-    alert('Logged out!');
+    this.showLogoutConfirm = true;
+  }
+  confirmLogout() {
+    this.showLogoutConfirm = false;
+    this.auth.logout();
+    this.router.navigate(['/auth/login']);
   }
 
   // Add mock user data and profileActions array

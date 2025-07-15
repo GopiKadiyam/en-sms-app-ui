@@ -13,7 +13,7 @@ import { ButtonComponent } from '../shared/button.component';
       <div class="bg-background dark:bg-gray-900 rounded-2xl shadow-2xl p-8 w-full max-w-md relative animate-fade-in border border-border">
         <div class="text-center mb-6">
           <img src="assets/images/EngageNest.gif" alt="EngageNest Logo" class="mx-auto h-20 rounded mb-2 shadow-lg" />
-          <p class="text-text/70 text-base">Enter your credentials to continue</p>
+          <p class="text-text dark:text-text/70 text-base">Enter your credentials to continue</p>
         </div>
         <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-5">
           <div>
