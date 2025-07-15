@@ -1,0 +1,12 @@
+@import './styles/tailwind.css'; 
+
+:root {
+  --color-background: #fff;
+  --color-primary: #1976d2;
+  --color-text: #212121;
+  --color-nav: #f5f5f5;
+  --color-sidebar: #263238;
+  --color-sidebar-text: #fff;
+  --color-accent: #ff4081;
+  --color-border: #e0e0e0;
+} 
