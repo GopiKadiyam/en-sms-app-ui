@@ -477,10 +477,7 @@ export class SidebarComponent {
   }
 
   ngOnInit() {
-    this.isDark = localStorage.getItem('theme') === 'dark';
-    if (this.isDark) {
-      document.documentElement.classList.add('dark');
-    }
+    this.currentTheme = this.themeService.theme.name;
     this.isMobile = window.innerWidth < 768;
     window.addEventListener('resize', () => {
       this.isMobile = window.innerWidth < 768;
