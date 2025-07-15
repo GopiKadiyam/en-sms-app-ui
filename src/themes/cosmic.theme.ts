@@ -3,7 +3,7 @@ export const cosmicTheme = {
   colors: {
     background: '#252547',
     primary: '#a16eff',
-    text: '#f3f3fa',
+    text: '#f3f3fa', // high-contrast light color
     nav: '#2e2e5e',
     sidebar: '#1b1b38',
     sidebarText: '#f3f3fa',

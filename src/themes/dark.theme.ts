@@ -3,7 +3,7 @@ export const darkTheme = {
   colors: {
     background: '#18181b',
     primary: '#6366f1',
-    text: '#f3f4f6',
+    text: '#f3f4f6', // high-contrast light color
     nav: '#23232b',
     sidebar: '#18181b',
     sidebarText: '#f3f4f6',

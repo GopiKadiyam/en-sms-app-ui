@@ -33,16 +33,14 @@ export interface NavItem {
       class="md:hidden fixed top-4 left-4 z-50 bg-white dark:bg-gray-900 rounded-full p-2 shadow-lg border border-gray-200 dark:border-gray-700"
       (click)="sidebarOpen = true"
       aria-label="Open sidebar"
-      title="Open sidebar"
-    >
-      <lucide-icon [name]="Menu" class="w-6 h-6" />
+      title="Open sidebar">
+      <lucide-icon [name]="Menu" class="w-6 h-6 text-text dark:text-text/90" />
     </button>
     <!-- Overlay for mobile -->
     <div
       class="fixed inset-0 bg-black bg-opacity-40 z-40 md:hidden transition-opacity duration-200"
       *ngIf="sidebarOpen && isMobile"
-      (click)="sidebarOpen = false"
-    ></div>
+      (click)="sidebarOpen = false"></div>
     <!-- Sidebar -->
     <aside
       class="h-full flex flex-col justify-between shadow-lg bg-background dark:bg-gray-900 fixed md:relative z-50 top-0 left-0 transition-all duration-300"
@@ -50,8 +48,7 @@ export interface NavItem {
       [class.w-20]="collapsed && !isMobile"
       [class.-translate-x-full]="!sidebarOpen && isMobile"
       [class.translate-x-0]="sidebarOpen || !isMobile"
-      style="height: 100vh;"
-    >
+      style="height: 100vh;">
       <!-- Logo/Brand Row: full-width rectangle, no text, image fills space -->
       <div class="w-full px-2 pt-2 pb-2 border-b border-border flex items-center justify-center ">
         <ng-container *ngIf="!collapsed || isMobile; else faviconOnly">
@@ -68,17 +65,15 @@ export interface NavItem {
           class="flex-1 flex items-center justify-center p-2 rounded bg-nav hover:bg-nav-hover transition relative"
           (click)="collapsed = !collapsed"
           aria-label="Toggle sidebar"
-          title="Collapse/Expand Sidebar"
-        >
-          <lucide-icon [name]="Menu" class="w-5 h-5 text-text" />
+          title="Collapse/Expand Sidebar">
+          <lucide-icon [name]="Menu" class="w-5 h-5 text-text dark:text-text/90" />
         </button>
         <button
           class="flex-1 flex items-center justify-center p-2 rounded bg-nav hover:bg-nav-hover transition relative"
           aria-label="Notifications"
-          title="Notifications"
-        >
-          <lucide-icon [name]="Bell" class="w-5 h-5 text-text" />
-          <span *ngIf="notificationCount > 0" class="absolute top-1 right-1 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5">{{ notificationCount }}</span>
+          title="Notifications">
+          <lucide-icon [name]="Bell" class="w-5 h-5 text-text dark:text-text/90" />
+          <span *ngIf="notificationCount > 0" class="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 bg-red-500 text-white text-xs rounded-full px-1.5 py-0.5">{{ notificationCount }}</span>
         </button>
         <!-- Future actions: add more buttons here -->
       </div>
@@ -92,9 +87,9 @@ export interface NavItem {
 
           <!-- Section label with always-visible children -->
           <ng-container *ngIf="nav.type === 'section'">
-            <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-text/70 dark:text-text/20 px-3 mb-2"
+            <div class="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-text dark:text-text/90 px-3 mb-2"
                  [attr.title]="nav.title">
-              <lucide-icon *ngIf="nav.icon" [name]="nav.icon" class="w-4 h-4" />
+              <lucide-icon *ngIf="nav.icon" [name]="nav.icon" class="w-4 h-4 text-text dark:text-text/90" />
               <span *ngIf="!collapsed || isMobile">{{ nav.title }}</span>
             </div>
             <div class="space-y-2 ml-4">
@@ -107,12 +102,12 @@ export interface NavItem {
           <!-- Group (expand/collapse) -->
           <ng-container *ngIf="nav.type === 'group'">
             <button type="button"
-              class="flex items-center w-full gap-2 px-3 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider text-text/70 dark:text-text/20 hover:bg-nav transition mb-2 group"
+              class="flex items-center w-full gap-2 px-3 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider text-text dark:text-text/90 hover:bg-nav transition mb-2 group"
               (click)="toggleGroup(i)"
               [attr.aria-expanded]="openGroups[i]"
               [attr.title]="nav.title"
             >
-              <lucide-icon *ngIf="nav.icon" [name]="nav.icon" class="w-4 h-4" />
+              <lucide-icon *ngIf="nav.icon" [name]="nav.icon" class="w-4 h-4 text-text dark:text-text/90" />
               <span *ngIf="!collapsed || isMobile">{{ nav.title }}</span>
             </button>
             <div class="space-y-2 ml-4" *ngIf="openGroups[i]">
@@ -146,7 +141,7 @@ export interface NavItem {
         <ng-template #navTemplate let-nav="nav" let-i="i">
           <!-- Section (recursive) -->
           <ng-container *ngIf="nav.type === 'section'">
-            <div class="text-xs font-semibold uppercase tracking-wider text-text/70 dark:text-text/20 px-3 mb-2" [attr.title]="nav.title">{{ nav.title }}</div>
+            <div class="font-semibold uppercase tracking-wider text-xs text-text dark:text-text/90 px-3 mb-2" [attr.title]="nav.title">{{ nav.title }}</div>
             <div class="space-y-2 ml-4">
               <ng-container *ngFor="let child of nav.children">
                 <ng-container *ngTemplateOutlet="navTemplate; context: { nav: child }"></ng-container>
@@ -157,12 +152,12 @@ export interface NavItem {
           <!-- Group (recursive, expand/collapse) -->
           <ng-container *ngIf="nav.type === 'group'">
             <button type="button"
-              class="flex items-center w-full gap-2 px-3 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider text-text/70 dark:text-text/20 hover:bg-nav transition mb-2 group"
+              class="flex items-center w-full gap-2 px-3 py-2 rounded-lg text-xs font-semibold uppercase tracking-wider text-text dark:text-text/90 hover:bg-nav transition mb-2 group"
               (click)="nav._open = !nav._open"
               [attr.aria-expanded]="nav._open"
               [attr.title]="nav.title"
             >
-              <lucide-icon [name]="nav._open ? ChevronDown : ChevronRight" class="w-4 h-4 transition-transform" />
+              <lucide-icon [name]="nav._open ? ChevronDown : ChevronRight" class="w-4 h-4 transition-transform text-text dark:text-text/90" />
               <span *ngIf="!collapsed || isMobile">{{ nav.title }}</span>
             </button>
             <div class="space-y-2 ml-4" *ngIf="nav._open">
@@ -182,32 +177,32 @@ export interface NavItem {
           </ng-container>
 
           <!-- Disabled -->
-          <div *ngIf="nav.type === 'disabled'" class="flex items-center gap-3 px-3 py-2 rounded-lg text-text/50 dark:text-text/70 bg-nav transition" [attr.title]="nav.title">
-            <lucide-icon [name]="nav.icon" class="w-5 h-5" />
+          <div *ngIf="nav.type === 'disabled'" class="flex items-center gap-3 px-3 py-2 rounded-lg text-text dark:text-text/70 bg-nav transition" [attr.title]="nav.title">
+            <lucide-icon [name]="nav.icon" class="w-5 h-5 text-text dark:text-text/90" />
             <span *ngIf="!collapsed || isMobile">{{ nav.title }}</span>
           </div>
           <!-- External -->
           <a *ngIf="nav.type === 'external'" [href]="nav.externalUrl" target="_blank" rel="noopener" class="flex items-center gap-3 px-3 py-2 rounded-lg text-blue-700 dark:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-900 transition relative group" [attr.title]="nav.title">
-            <lucide-icon [name]="nav.icon" class="w-5 h-5" />
+            <lucide-icon [name]="nav.icon" class="w-5 h-5 text-text dark:text-text/90" />
             <span *ngIf="!collapsed || isMobile">{{ nav.title }}</span>
             <svg class="w-4 h-4 ml-1 text-blue-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
           </a>
           <!-- Badge -->
-          <a *ngIf="nav.type === 'badge'" [routerLink]="nav.route" routerLinkActive="active-nav" [routerLinkActiveOptions]="{ exact: true }" class="flex items-center gap-3 px-3 py-2 rounded-lg text-text/70 dark:text-text/20 hover:bg-nav transition relative group" [attr.title]="nav.title">
-            <lucide-icon [name]="nav.icon" class="w-5 h-5" />
+          <a *ngIf="nav.type === 'badge'" [routerLink]="nav.route" routerLinkActive="active-nav" [routerLinkActiveOptions]="{ exact: true }" class="flex items-center gap-3 px-3 py-2 rounded-lg text-text dark:text-text/20 hover:bg-nav transition relative group" [attr.title]="nav.title">
+            <lucide-icon [name]="nav.icon" class="w-5 h-5 text-text dark:text-text/90" />
             <span *ngIf="!collapsed || isMobile">{{ nav.title }}</span>
             <span class="ml-2 bg-red-500 text-white text-xs rounded-full px-2 py-0.5" *ngIf="nav.badgeCount && (!collapsed || isMobile)">{{ nav.badgeCount }}</span>
             <span class="absolute left-full ml-2 w-max bg-background text-text text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">{{ nav.title }}</span>
           </a>
           <!-- Link with Action -->
           <button *ngIf="nav.type === 'linkWithAction'" (click)="nav.action && nav.action()" class="flex items-center gap-3 px-3 py-2 rounded-lg text-red-700 dark:text-red-300 hover:bg-red-50 dark:hover:bg-red-900 transition relative group w-full" [attr.title]="nav.title">
-            <lucide-icon [name]="nav.icon" class="w-5 h-5" />
+            <lucide-icon [name]="nav.icon" class="w-5 h-5 text-text dark:text-text/90" />
             <span *ngIf="!collapsed || isMobile">{{ nav.title }}</span>
             <span class="absolute left-full ml-2 w-max bg-background text-text text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">{{ nav.title }}</span>
           </button>
           <!-- Normal -->
           <a *ngIf="nav.type === 'normal'" [routerLink]="nav.route" routerLinkActive="active-nav" [routerLinkActiveOptions]="{ exact: true }" class="flex items-center gap-3 px-3 py-2 rounded-lg text-text dark:text-text/90 hover:bg-nav transition relative group" [attr.title]="nav.title">
-            <lucide-icon [name]="nav.icon" class="w-5 h-5" />
+            <lucide-icon [name]="nav.icon" class="w-5 h-5 text-text dark:text-text/90" />
             <span *ngIf="!collapsed || isMobile">{{ nav.title }}</span>
             <span class="absolute left-full ml-2 w-max bg-background text-text text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">{{ nav.title }}</span>
           </a>
@@ -225,12 +220,12 @@ export interface NavItem {
               <img [src]="user.imageUrl" alt="User Avatar" class="w-10 h-10 object-cover" />
             </ng-container>
             <ng-template #userIcon>
-              <lucide-icon [name]="User" class="w-6 h-6 text-text/50 dark:text-text/70" />
+              <lucide-icon [name]="User" class="w-6 h-6 text-text dark:text-text/70" />
             </ng-template>
           </div>
           <div class="ml-3" [class.hidden]="collapsed && !isMobile">
             <div class="font-semibold text-text dark:text-text/90">{{ user.name }}</div>
-            <div class="text-xs text-text/70 dark:text-text/50">{{ user.role }}</div>
+            <div class="text-xs text-text dark:text-text/70">{{ user.role }}</div>
           </div>
           <!-- Popover -->
           <div *ngIf="profilePopoverOpen" class="absolute left-16 bottom-full z-50 w-72 mb-2 bg-background dark:bg-gray-900 rounded-xl shadow-xl border border-border p-4 flex flex-col gap-2 animate-fade-in" style="min-width: 220px; min-height: 56px;">
@@ -240,15 +235,15 @@ export interface NavItem {
                   <img [src]="user.imageUrl" alt="User Avatar" class="w-12 h-12 object-cover" />
                 </ng-container>
                 <ng-template #userIconPopover>
-                  <lucide-icon [name]="User" class="w-7 h-7 text-text/50 dark:text-text/70" />
+                  <lucide-icon [name]="User" class="w-7 h-7 text-text dark:text-text/70" />
                 </ng-template>
               </div>
               <div>
                 <div class="font-semibold text-base text-text dark:text-text/90">{{ user.name }}</div>
-                <div class="text-xs text-text/70 dark:text-text/50">{{ user.email }}</div>
-                <div class="text-xs text-text/50 dark:text-text/70 mt-1">Role: <span class="font-medium">{{ user.role }}</span></div>
-                <div class="text-xs text-text/50 dark:text-text/70">Tenant: <span class="font-medium">{{ user.tenant }}</span></div>
-                <div class="text-xs text-text/50 dark:text-text/70">Last login: <span class="font-medium">{{ user.lastLogin }}</span></div>
+                <div class="text-xs text-text dark:text-text/70">{{ user.email }}</div>
+                <div class="text-xs text-text dark:text-text/70 mt-1">Role: <span class="font-medium">{{ user.role }}</span></div>
+                <div class="text-xs text-text dark:text-text/70">Tenant: <span class="font-medium">{{ user.tenant }}</span></div>
+                <div class="text-xs text-text dark:text-text/70">Last login: <span class="font-medium">{{ user.lastLogin }}</span></div>
                 <div class="text-xs text-green-600 dark:text-green-400 mt-1 flex items-center gap-1">
                   <span class="inline-block w-2 h-2 rounded-full bg-green-500"></span> {{ user.status }}
                 </div>
@@ -273,7 +268,7 @@ export interface NavItem {
                     (click)="onThemeDropdownToggle($event)"
                     [attr.title]="!collapsed || isMobile ? null : themeNames[currentTheme]"
             >
-              <lucide-icon [name]="themeIcons[currentTheme]" class="w-5 h-5" />
+              <lucide-icon [name]="themeIcons[currentTheme]" class="w-5 h-5 text-text dark:text-text/90" />
               <span *ngIf="!collapsed || isMobile">{{ themeNames[currentTheme] }}</span>
               <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg>
             </button>
@@ -283,7 +278,7 @@ export interface NavItem {
                       (click)="onThemeSelect(t)"
                       [attr.title]="themeNames[t]"
               >
-                <lucide-icon [name]="themeIcons[t]" class="w-5 h-5" />
+                <lucide-icon [name]="themeIcons[t]" class="w-5 h-5 text-text dark:text-text/90" />
                 <span>{{ themeNames[t] }}</span>
               </button>
             </div>
@@ -293,7 +288,7 @@ export interface NavItem {
             aria-label="Logout"
           >
             <lucide-icon [name]="LogOut" class="w-5 h-5 text-text dark:text-text/90" />
-            <span class="text-xs text-text dark:text-text/90" [class.hidden]="collapsed && !isMobile">Logout</span>
+            <span *ngIf="!collapsed && !isMobile" class="text-xs text-text dark:text-text/90">Logout</span>
             <span *ngIf="collapsed && !isMobile" class="absolute left-full ml-2 w-max bg-background text-text text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">Logout</span>
           </button>
         </div>
