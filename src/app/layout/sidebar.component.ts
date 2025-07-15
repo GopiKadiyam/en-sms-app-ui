@@ -252,10 +252,10 @@ export interface NavItem {
             <div class="flex flex-wrap gap-2 mt-3">
               <button *ngFor="let action of profileActions"
                       (click)="action.action()"
-                      [ngClass]="action.color || 'text-text'"
-                      class="flex items-center gap-1 px-3 py-1 rounded hover:bg-nav transition text-xs font-medium">
-                <lucide-icon [name]="action.icon" class="w-4 h-4 text-text dark:text-text/90" />
-                <span class="text-text dark:text-text/90">{{ action.label }}</span>
+                      [ngClass]="action.label === 'Log Out' ? 'bg-red-600 hover:bg-red-700 text-white' : 'text-text dark:text-text/90 hover:bg-nav'"
+                      class="flex items-center gap-1 px-3 py-1 rounded transition text-xs font-medium">
+                <lucide-icon [name]="action.icon" [ngClass]="action.label === 'Log Out' ? 'text-white' : 'text-text dark:text-text/90'" class="w-4 h-4" />
+                <span [ngClass]="action.label === 'Log Out' ? 'text-white' : 'text-text dark:text-text/90'">{{ action.label }}</span>
               </button>
             </div>
           </div>
@@ -283,13 +283,13 @@ export interface NavItem {
               </button>
             </div>
           </div>
-          <button class="flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded bg-red-100 dark:bg-red-900 hover:bg-red-200 dark:hover:bg-red-800 text-red-700 dark:text-red-200 transition"
+          <button class="flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded bg-red-600 hover:bg-red-700 text-white transition"
             title="Logout"
             aria-label="Logout"
           >
-            <lucide-icon [name]="LogOut" class="w-5 h-5 text-text dark:text-text/90" />
-            <span *ngIf="!collapsed && !isMobile" class="text-xs text-text dark:text-text/90">Logout</span>
-            <span *ngIf="collapsed && !isMobile" class="absolute left-full ml-2 w-max bg-background text-text text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">Logout</span>
+            <lucide-icon [name]="LogOut" class="w-5 h-5 text-white" />
+            <span *ngIf="!collapsed && !isMobile" class="text-xs text-white">Logout</span>
+            <span *ngIf="collapsed && !isMobile" class="absolute left-full ml-2 w-max bg-background text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity">Logout</span>
           </button>
         </div>
       </div>
