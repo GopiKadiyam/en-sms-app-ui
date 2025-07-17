@@ -3,19 +3,21 @@ import { AuthService } from './auth/auth.service';
 import { CommonModule } from '@angular/common';
 import { take } from 'rxjs/operators';
 import { Router, NavigationStart, RouterOutlet } from '@angular/router';
+import { LoaderComponent } from './shared/loader.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet],
+  imports: [CommonModule, RouterOutlet, LoaderComponent],
   template: `
     <router-outlet></router-outlet>
+    <app-loader></app-loader>
   `,
 })
 export class AppComponent {
   authenticated = false;
   private expiryInterval: any;
-  private lastRoute: string = '/dashboard';
+  private lastRoute: string = '/app/dashboard';
   private ignoreNextNav = false;
 
   constructor(private auth: AuthService, private router: Router) {}
@@ -30,14 +32,7 @@ export class AppComponent {
       }
     });
 
-    this.auth.isAuthenticated$.pipe(take(1)).subscribe(auth => {
-      this.authenticated = auth;
-      if (auth) {
-        this.startExpiryCheck();
-      } else {
-        this.router.navigate(['/auth/login']);
-      }
-    });
+    // Only handle expiry check and redirect for protected routes
     this.auth.isAuthenticated$.subscribe(auth => {
       this.authenticated = auth;
       if (auth) {
@@ -49,7 +44,10 @@ export class AppComponent {
         }
       } else {
         this.stopExpiryCheck();
-        if (!this.router.url.startsWith('/auth/login')) {
+        // Only redirect to /auth/login if on a protected route
+        const publicRoutes = ['/home', '/auth/login', '/'];
+        const isPublic = publicRoutes.some(r => this.router.url === r || this.router.url.startsWith(r));
+        if (!isPublic && this.router.url.startsWith('/app')) {
           this.router.navigate(['/auth/login']);
         }
       }

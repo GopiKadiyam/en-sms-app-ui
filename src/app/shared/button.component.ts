@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { NgClass } from '@angular/common';
 
 @Component({
@@ -8,8 +8,9 @@ import { NgClass } from '@angular/common';
   template: `
     <button
       [type]="type"
-      [ngClass]="classes"
+      [ngClass]="ngClass"
       [disabled]="disabled"
+      (click)="handleClick($event)"
     >
       <ng-content></ng-content>
     </button>
@@ -17,12 +18,11 @@ import { NgClass } from '@angular/common';
 })
 export class ButtonComponent {
   @Input() type: 'button' | 'submit' = 'button';
-  @Input() variant: 'primary' | 'secondary' = 'primary';
   @Input() disabled = false;
+  @Input() ngClass: string | string[] | Set<string> | { [klass: string]: any } = '';
+  @Output() click = new EventEmitter<Event>();
 
-  get classes() {
-    return this.variant === 'primary'
-      ? 'w-full py-2 px-4 rounded bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 transition'
-      : 'w-full py-2 px-4 rounded bg-gray-200 dark:bg-gray-800 text-gray-900 dark:text-gray-100 hover:bg-gray-300 dark:hover:bg-gray-700 disabled:opacity-50 transition';
+  handleClick(event: Event) {
+    this.click.emit(event);
   }
 } 

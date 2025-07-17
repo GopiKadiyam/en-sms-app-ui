@@ -1,15 +1,37 @@
 import { Routes } from '@angular/router';
-import { LoginComponent } from './auth/login.component';
-import { LayoutShellComponent } from './layout/layout-shell.component';
+import { authGuard } from './auth/auth.guard';
 
 export const routes: Routes = [
+  {
+    path: 'home',
+    loadComponent: () => import('./features/home/home.component').then(m => m.HomeComponent),
+  },
+  {
+    path: '',
+    pathMatch: 'full',
+    redirectTo: 'home',
+  },
+  // Auth routes
   {
     path: 'auth/login',
     loadComponent: () => import('./auth/login.component').then(m => m.LoginComponent),
   },
   {
-    path: '',
-    component: LayoutShellComponent,
+    path: 'auth/signup',
+    loadComponent: () => import('./auth/login.component').then(m => m.LoginComponent),
+  },
+  {
+    path: 'auth/forgot',
+    loadComponent: () => import('./auth/login.component').then(m => m.LoginComponent),
+  },
+  {
+    path: 'auth/**',
+    redirectTo: 'auth/login',
+  },
+  {
+    path: 'app',
+    loadComponent: () => import('./layout/layout-shell.component').then(m => m.LayoutShellComponent),
+    canActivate: [authGuard],
     children: [
       {
         path: 'dashboard',
@@ -17,21 +39,22 @@ export const routes: Routes = [
       },
       {
         path: 'users',
-        loadComponent: () => import('./features/users/users.component').then(m => m.UsersComponent),
+        loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent),
       },
       {
-        path: 'api-keys',
-        loadComponent: () => import('./features/api-keys/api-keys.component').then(m => m.ApiKeysComponent),
-      },
-      {
-        path: '',
-        pathMatch: 'full',
+        path: 'operations',
         redirectTo: 'dashboard',
+        pathMatch: 'full',
       },
       {
         path: '**',
+        pathMatch: 'full',
         redirectTo: 'dashboard',
-      },
-    ]
-  }
+      }
+    ],
+  },
+  {
+    path: '**',
+    redirectTo: 'home',
+  },
 ]; 
