@@ -166,4 +166,50 @@ export class AuthService {
       this.logout();
     }
   }
+
+  /**
+   * Check if the current token state has changed and update auth state accordingly
+   * This is useful for detecting manual token removal
+   */
+  checkTokenState() {
+    const hasToken = this.hasValidToken();
+    const currentState = this.authState$.value;
+    
+    if (hasToken !== currentState) {
+      console.log(`[AuthService] Token state changed: ${currentState} -> ${hasToken}`);
+      this.authState$.next(hasToken);
+    }
+  }
+
+  /**
+   * Simulate token expiry for testing purposes
+   */
+  simulateTokenExpiry() {
+    // Create an expired token
+    const expiredToken = btoa(JSON.stringify({ 
+      exp: Math.floor(Date.now() / 1000) - 3600, // 1 hour ago
+      sub: 'test@example.com',
+      name: 'Test User',
+      role: 'User'
+    }));
+    
+    // Replace current token with expired one
+    if (localStorage.getItem(this.tokenKey)) {
+      localStorage.setItem(this.tokenKey, expiredToken);
+    } else if (sessionStorage.getItem(this.tokenKey)) {
+      sessionStorage.setItem(this.tokenKey, expiredToken);
+    }
+    
+    // Trigger auth state change
+    this.authState$.next(false);
+  }
+
+  /**
+   * Simulate manual token removal for testing purposes
+   */
+  removeToken() {
+    localStorage.removeItem(this.tokenKey);
+    sessionStorage.removeItem(this.tokenKey);
+    this.authState$.next(false);
+  }
 } 

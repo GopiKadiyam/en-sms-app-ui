@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
+import { RedirectService } from '../../core/redirect.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,7 +18,7 @@ import { AuthService } from '../../auth/auth.service';
             <p class="text-gray-600 mt-1">Welcome to your EngageNest CPaaS dashboard</p>
           </div>
           <div class="flex items-center gap-4">
-            <!-- <div class="text-right">
+            <div class="text-right">
               <p class="text-sm text-gray-600">Logged in as</p>
               <p class="font-semibold text-gray-900">{{ userInfo?.name || userInfo?.username || 'User' }}</p>
               <p class="text-xs text-gray-500">{{ userInfo?.role || 'User' }}</p>
@@ -26,7 +27,56 @@ import { AuthService } from '../../auth/auth.service';
               (click)="logout()"
               class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
               Logout
-            </button> -->
+            </button>
+          </div>
+        </div>
+
+        <!-- Debug Info (Development Only) -->
+        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+          <h3 class="text-lg font-semibold text-yellow-800 mb-2">Debug Info - Redirect Service</h3>
+          <div class="space-y-2 text-sm">
+            <p><strong>Current Tab ID:</strong> {{ redirectService.getCurrentTabId() }}</p>
+            <p><strong>Current Router URL:</strong> {{ redirectService.getCurrentRouterUrl() }}</p>
+            <p><strong>Stored Redirect URL:</strong> {{ redirectService.debugStoredUrl() || 'None' }}</p>
+            <p><strong>All Stored URLs:</strong></p>
+            <pre class="bg-white p-2 rounded text-xs overflow-auto">{{ getAllStoredUrls() | json }}</pre>
+            <div class="flex gap-2 mt-3">
+              <button 
+                (click)="testStoreRedirect()"
+                class="px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700">
+                Test Store Current URL
+              </button>
+              <button 
+                (click)="testClearRedirect()"
+                class="px-3 py-1 bg-red-600 text-white rounded text-xs hover:bg-red-700">
+                Clear Redirect URL
+              </button>
+              <button 
+                (click)="testCleanup()"
+                class="px-3 py-1 bg-green-600 text-white rounded text-xs hover:bg-green-700">
+                Cleanup Old URLs
+              </button>
+              <button 
+                (click)="testTokenExpiry()"
+                class="px-3 py-1 bg-orange-600 text-white rounded text-xs hover:bg-orange-700">
+                Simulate Token Expiry
+              </button>
+              <button 
+                (click)="testManualTokenRemoval()"
+                class="px-3 py-1 bg-purple-600 text-white rounded text-xs hover:bg-purple-700">
+                Simulate Manual Token Removal
+              </button>
+              <button 
+                (click)="testClearAllRedirects()"
+                class="px-3 py-1 bg-gray-600 text-white rounded text-xs hover:bg-gray-700">
+                Clear All Redirect URLs
+              </button>
+              <button 
+                (click)="testDirectUrlAccess()"
+                class="px-3 py-1 bg-indigo-600 text-white rounded text-xs hover:bg-indigo-700">
+                Test Direct URL Access
+              </button>
+            </div>
           </div>
         </div>
 
@@ -134,6 +184,7 @@ import { AuthService } from '../../auth/auth.service';
 export class DashboardComponent {
   private auth = inject(AuthService);
   private router = inject(Router);
+  redirectService = inject(RedirectService);
 
   get userInfo() {
     const token = this.auth.token;
@@ -150,5 +201,46 @@ export class DashboardComponent {
   logout() {
     this.auth.logout();
     this.router.navigate(['/']);
+  }
+
+  // Debug methods
+  getAllStoredUrls() {
+    return this.redirectService.getAllStoredRedirectUrls();
+  }
+
+  testStoreRedirect() {
+    this.redirectService.forceStoreCurrentUrl();
+    alert('Current URL stored as redirect URL');
+  }
+
+  testClearRedirect() {
+    this.redirectService.clearRedirectUrl();
+    alert('Redirect URL cleared');
+  }
+
+  testCleanup() {
+    this.redirectService.cleanupOldRedirectUrls();
+    alert('Old redirect URLs cleaned up');
+  }
+
+  testTokenExpiry() {
+    this.auth.simulateTokenExpiry();
+    alert('Token expiry simulated - you should be redirected to login');
+  }
+
+  testManualTokenRemoval() {
+    this.auth.removeToken();
+    alert('Token manually removed. You should be redirected to login.');
+  }
+
+  testClearAllRedirects() {
+    this.redirectService.clearAllRedirectUrls();
+    alert('All redirect URLs cleared.');
+  }
+
+  testDirectUrlAccess() {
+    const currentUrl = window.location.href;
+    window.open(currentUrl, '_blank');
+    alert(`Opened current URL in new tab: ${currentUrl}\n\nNow manually remove the JWT token from the new tab and try to access the page.`);
   }
 } 
