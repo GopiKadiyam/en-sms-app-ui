@@ -6,36 +6,46 @@ export const routes: Routes = [
   // Landing page
   {
     path: '',
-    redirectTo: 'home',
+    redirectTo: ROUTE_CONSTANTS.PUBLIC.HOME,
     pathMatch: 'full',
   },
   {
-    path: 'home',
+    path: ROUTE_CONSTANTS.PUBLIC.HOME.replace('/', ''),
     pathMatch: 'full',
     loadComponent: () => import('./public/landing/home/home.component').then(m => m.HomeComponent),
   },
   
   // Auth routes (centralized)
   {
-    path: 'auth/login',
-    loadComponent: () => import('./shared/components/login.component').then(m => m.LoginComponent),
-  },
-  {
-    path: 'auth/signup',
-    loadComponent: () => import('./shared/components/login.component').then(m => m.LoginComponent),
-  },
-  {
-    path: 'auth/forgot',
-    loadComponent: () => import('./shared/components/login.component').then(m => m.LoginComponent),
-  },
-  {
-    path: 'auth/**',
-    redirectTo: 'auth/login',
+    path: 'auth',
+    children: [
+      {
+        path: 'login',
+        loadComponent: () => import('./shared/components/login.component').then(m => m.LoginComponent),
+      },
+      {
+        path: 'signup',
+        loadComponent: () => import('./shared/components/login.component').then(m => m.LoginComponent),
+      },
+      {
+        path: 'forgot',
+        loadComponent: () => import('./shared/components/login.component').then(m => m.LoginComponent),
+      },
+      {
+        path: '',
+        redirectTo: 'login',
+        pathMatch: 'full'
+      },
+      {
+        path: '**',
+        redirectTo: 'login',
+      }
+    ]
   },
   
   // Unified Dashboard (protected)
   {
-    path: 'dashboard',
+    path: ROUTE_CONSTANTS.DASHBOARD.MAIN.replace('/', ''),
     canActivate: [authGuard],
     loadComponent: () => import('./shared/components/layout-shell.component').then(m => m.LayoutShellComponent),
     children: [
@@ -52,33 +62,33 @@ export const routes: Routes = [
   
   // Product Apps (protected)
   {
-    path: 'products',
+    path: ROUTE_CONSTANTS.PRODUCTS.BASE.replace('/', ''),
     canActivate: [authGuard],
     children: [
       {
-        path: 'messaging-hub',
+        path: ROUTE_CONSTANTS.PRODUCTS.MESSAGING_HUB.BASE.replace('/products/', ''),
         loadComponent: () => import('./shared/components/layout-shell.component').then(m => m.LayoutShellComponent),
         children: [
           {
             path: '',
-            redirectTo: 'dashboard',
+            redirectTo: ROUTE_CONSTANTS.DASHBOARD.MAIN.replace('/', ''),
             pathMatch: 'full',
           },
           {
-            path: 'dashboard',
+            path: ROUTE_CONSTANTS.DASHBOARD.MAIN.replace('/', ''),
             loadComponent: () => import('./dashboard/unified/dashboard.component').then(m => m.DashboardComponent),
           },
           {
-            path: 'campaigns',
+            path: ROUTE_CONSTANTS.PRODUCTS.MESSAGING_HUB.CAMPAIGNS.replace('/products/messaging-hub/', ''),
             loadComponent: () => import('./products/messaging-hub/campaigns/campaigns.component').then(m => m.CampaignsComponent),
           },
           {
-            path: 'analytics',
+            path: ROUTE_CONSTANTS.PRODUCTS.MESSAGING_HUB.ANALYTICS.replace('/products/messaging-hub/', ''),
             loadComponent: () => import('./platform/analytics/cross-product/analytics.component').then(m => m.AnalyticsComponent),
           },
           {
             path: '**',
-            redirectTo: 'dashboard',
+            redirectTo: ROUTE_CONSTANTS.DASHBOARD.MAIN.replace('/', ''),
           }
         ],
       },
@@ -96,23 +106,23 @@ export const routes: Routes = [
   
   // Platform routes (protected)
   {
-    path: 'platform',
+    path: ROUTE_CONSTANTS.PLATFORM.BASE.replace('/', ''),
     canActivate: [authGuard],
     children: [
       {
-        path: 'billing',
+        path: ROUTE_CONSTANTS.PLATFORM.BILLING.BASE.replace('/platform/', ''),
         loadComponent: () => import('./platform/billing/management/billing.component').then(m => m.BillingComponent),
       },
       {
-        path: 'users',
+        path: ROUTE_CONSTANTS.PLATFORM.USERS.BASE.replace('/platform/', ''),
         loadComponent: () => import('./platform/users/management/users.component').then(m => m.UsersComponent),
       },
       {
-        path: 'api-keys',
+        path: ROUTE_CONSTANTS.PLATFORM.API_KEYS.BASE.replace('/platform/', ''),
         loadComponent: () => import('./platform/api-keys/management/api-keys.component').then(m => m.ApiKeysComponent),
       },
       {
-        path: 'analytics',
+        path: ROUTE_CONSTANTS.PLATFORM.ANALYTICS.BASE.replace('/platform/', ''),
         loadComponent: () => import('./platform/analytics/cross-product/analytics.component').then(m => m.AnalyticsComponent),
       },
     ]
@@ -120,7 +130,7 @@ export const routes: Routes = [
   
   // Public pages
   {
-    path: 'pricing',
+    path: ROUTE_CONSTANTS.PUBLIC.PRICING.replace('/', ''),
     loadComponent: () => import('./public/pricing/page/pricing.component').then(m => m.PricingComponent),
   },
   

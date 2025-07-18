@@ -2,6 +2,7 @@ import { inject } from '@angular/core';
 import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { RedirectService } from '../services/redirect.service';
+import { ROUTE_CONSTANTS } from '../constants/routes.constants';
 
 export const authGuard = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
   const router = inject(Router);
@@ -18,7 +19,7 @@ export const authGuard = (route: ActivatedRouteSnapshot, state: RouterStateSnaps
     // Store the specific requested URL
     redirectService.storeSpecificUrl(requestedUrl);
     
-    router.navigate(['/auth/login']);
+    router.navigate([ROUTE_CONSTANTS.AUTH.LOGIN]);
     return false;
   }
 }; 

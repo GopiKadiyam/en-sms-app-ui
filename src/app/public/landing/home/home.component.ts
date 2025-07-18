@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { ProfileMenuComponent } from '../../../shared/components/profile-menu.component';
 import { RedirectService } from '../../../core/services/redirect.service';
+import { ROUTE_CONSTANTS } from '../../../core/constants/routes.constants';
 
 @Component({
   selector: 'app-home',
@@ -86,28 +87,28 @@ import { RedirectService } from '../../../core/services/redirect.service';
             <!-- Product Links (show when authenticated) -->
             <ng-container *ngIf="isAuthenticated">
               <a 
-                href="/products/messaging-hub" 
+                [href]="ROUTE_CONSTANTS.PRODUCTS.MESSAGING_HUB.BASE" 
                 target="_blank"
                 class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
                 Go to Messaging Hub
               </a>
             </ng-container>
             <ng-container *ngIf="!isAuthenticated">
-              <a href="/products/messaging-hub" class="text-white hover:text-blue-200 transition-colors">Messaging Hub</a>
+              <a [href]="ROUTE_CONSTANTS.PRODUCTS.MESSAGING_HUB.BASE" class="text-white hover:text-blue-200 transition-colors">Messaging Hub</a>
             </ng-container>
             
-            <a href="/pricing" class="text-white hover:text-blue-200 transition-colors">Pricing</a>
+            <a [href]="ROUTE_CONSTANTS.PUBLIC.PRICING" class="text-white hover:text-blue-200 transition-colors">Pricing</a>
             
             <ng-container *ngIf="isAuthenticated">
               <a 
-                href="/platform/billing" 
+                [href]="ROUTE_CONSTANTS.PLATFORM.BILLING.BASE" 
                 target="_blank"
                 class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
                 Go to Billing
               </a>
             </ng-container>
             <ng-container *ngIf="!isAuthenticated">
-              <a href="/platform/billing" class="text-white hover:text-blue-200 transition-colors">Billing</a>
+              <a [href]="ROUTE_CONSTANTS.PLATFORM.BILLING.BASE" class="text-white hover:text-blue-200 transition-colors">Billing</a>
             </ng-container>
             
             <!-- Auth Buttons -->
@@ -376,7 +377,7 @@ import { RedirectService } from '../../../core/services/redirect.service';
           <div>
             <h3 class="text-lg font-semibold mb-4">Products</h3>
             <ul class="space-y-2">
-              <li><a href="/products/messaging-hub" class="text-gray-400 hover:text-white transition-colors">Messaging Hub</a></li>
+              <li><a [href]="ROUTE_CONSTANTS.PRODUCTS.MESSAGING_HUB.BASE" class="text-gray-400 hover:text-white transition-colors">Messaging Hub</a></li>
               <li><a href="#" class="text-gray-400 hover:text-white transition-colors">RCS Studio</a></li>
               <li><a href="#" class="text-gray-400 hover:text-white transition-colors">WhatsApp Business</a></li>
               <li><a href="#" class="text-gray-400 hover:text-white transition-colors">Voice Connect</a></li>
@@ -423,6 +424,9 @@ export class HomeComponent {
   private router = inject(Router);
   private redirectService = inject(RedirectService);
   
+  // Make ROUTE_CONSTANTS available in template
+  readonly ROUTE_CONSTANTS = ROUTE_CONSTANTS;
+  
   isScrolled = false;
 
   @HostListener('window:scroll', [])
@@ -440,9 +444,9 @@ export class HomeComponent {
 
   getStarted() {
     if (this.isAuthenticated) {
-      this.router.navigate(['/products/messaging-hub']);
+      this.router.navigate([ROUTE_CONSTANTS.PRODUCTS.MESSAGING_HUB.BASE]);
     } else {
-      this.router.navigate(['/auth/signup']);
+      this.router.navigate([ROUTE_CONSTANTS.AUTH.SIGNUP]);
     }
   }
 
@@ -452,7 +456,7 @@ export class HomeComponent {
   }
 
   goToMessagingHub() {
-    this.router.navigate(['/products/messaging-hub']);
+    this.router.navigate([ROUTE_CONSTANTS.PRODUCTS.MESSAGING_HUB.BASE]);
   }
 
   contactSales() {

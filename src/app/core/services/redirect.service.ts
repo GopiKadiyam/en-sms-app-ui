@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { ROUTE_CONSTANTS } from '../constants/routes.constants';
 
 @Injectable({
   providedIn: 'root'
@@ -73,7 +74,7 @@ export class RedirectService {
    */
   navigateToLogin(): void {
     this.storeRedirectUrl();
-    this.router.navigate(['/auth/login']);
+    this.router.navigate([ROUTE_CONSTANTS.AUTH.LOGIN]);
   }
 
   /**

@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { ConfirmDialogComponent } from './confirm-dialog.component';
+import { ROUTE_CONSTANTS } from '../../core/constants/routes.constants';
 // Types for navigation
 export type NavType = 'normal' | 'section' | 'group' | 'divider' | 'external' | 'badge' | 'custom' | 'submenu' | 'disabled' | 'linkWithAction';
 
@@ -390,7 +391,7 @@ export class SidebarComponent {
       type: 'normal',
       title: 'Dashboard',
       icon: Home,
-      route: '/products/messaging-hub/dashboard',
+      route: ROUTE_CONSTANTS.PRODUCTS.MESSAGING_HUB.DASHBOARD,
       tooltip: 'Dashboard'
     },
     {
@@ -405,14 +406,14 @@ export class SidebarComponent {
           type: 'normal',
           title: 'Campaigns',
           icon: Send,
-          route: '/products/messaging-hub/campaigns',
+          route: ROUTE_CONSTANTS.PRODUCTS.MESSAGING_HUB.CAMPAIGNS,
           tooltip: 'Manage campaigns'
         },
         {
           type: 'normal',
           title: 'Analytics',
           icon: FileText,
-          route: '/products/messaging-hub/analytics',
+          route: ROUTE_CONSTANTS.PRODUCTS.MESSAGING_HUB.ANALYTICS,
           tooltip: 'View analytics'
         }
       ]
@@ -429,14 +430,14 @@ export class SidebarComponent {
           type: 'external',
           title: 'Billing',
           icon: FileTextIcon,
-          externalUrl: '/billing',
+          externalUrl: ROUTE_CONSTANTS.PLATFORM.BILLING.BASE,
           tooltip: 'Manage billing'
         },
         {
           type: 'external',
           title: 'Pricing',
           icon: Star,
-          externalUrl: '/pricing',
+          externalUrl: ROUTE_CONSTANTS.PUBLIC.PRICING,
           tooltip: 'View pricing'
         }
       ]
@@ -467,7 +468,7 @@ export class SidebarComponent {
   confirmLogout() {
     this.showLogoutConfirm = false;
     this.auth.logout();
-    this.router.navigate(['/auth/login']);
+    this.router.navigate([ROUTE_CONSTANTS.AUTH.LOGIN]);
   }
 
   get user() {

@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { LucideAngularModule, User, Settings, LogOut, ChevronDown } from 'lucide-angular';
 import { ConfirmDialogComponent } from './confirm-dialog.component';
+import { ROUTE_CONSTANTS } from '../../core/constants/routes.constants';
 
 @Component({
   selector: 'app-profile-menu',
@@ -163,7 +164,7 @@ export class ProfileMenuComponent {
   confirmLogout() {
     this.showLogoutConfirm = false;
     this.auth.logout();
-    this.router.navigate(['/']);
+    this.router.navigate([ROUTE_CONSTANTS.PUBLIC.LANDING]);
   }
 
   viewProfile() { 
