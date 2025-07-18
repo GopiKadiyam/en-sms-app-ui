@@ -5,6 +5,8 @@ import { take } from 'rxjs/operators';
 import { Router, NavigationStart, RouterOutlet } from '@angular/router';
 import { LoaderComponent } from './shared/loader.component';
 import { RedirectService } from './core/redirect.service';
+import { APP_CONSTANTS } from './core';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -33,7 +35,9 @@ export class AppComponent {
       
       // If user was authenticated but is now not authenticated, store redirect URL
       if (this.lastAuthState && !auth) {
-        console.log('[AppComponent] User became unauthenticated, storing redirect URL');
+        if (environment.debug.enableLogging) {
+          console.log('[AppComponent] User became unauthenticated, storing redirect URL');
+        }
         this.redirectService.forceStoreCurrentUrl();
       }
       
@@ -48,9 +52,14 @@ export class AppComponent {
       } else {
         this.stopExpiryCheck();
         // Only redirect to login if on a protected route
-        const publicRoutes = ['/home', '/auth/login', '/', '/pricing'];
-        const isPublic = publicRoutes.some(r => this.router.url === r || this.router.url.startsWith(r));
-        if (!isPublic && (this.router.url.startsWith('/products') || this.router.url.startsWith('/billing'))) {
+        const isPublic = APP_CONSTANTS.ROUTES.PUBLIC.some(r => 
+          this.router.url === r || this.router.url.startsWith(r)
+        );
+        const isProtected = APP_CONSTANTS.ROUTES.PROTECTED.some(r => 
+          this.router.url.startsWith(r)
+        );
+        
+        if (!isPublic && isProtected) {
           this.redirectService.navigateToLogin();
         }
       }
@@ -60,7 +69,10 @@ export class AppComponent {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
         // Check if user is on a protected route but doesn't have a valid token
-        if (event.url.startsWith('/products') || event.url.startsWith('/billing')) {
+        const isProtected = APP_CONSTANTS.ROUTES.PROTECTED.some(r => 
+          event.url.startsWith(r)
+        );
+        if (isProtected) {
           this.auth.checkTokenState();
         }
       }
@@ -82,7 +94,7 @@ export class AppComponent {
       this.auth.checkTokenExpiry();
       // Also check for manual token removal
       this.auth.checkTokenState();
-    }, 5000);
+    }, environment.auth.tokenExpiryCheckInterval);
   }
 
   stopExpiryCheck() {
