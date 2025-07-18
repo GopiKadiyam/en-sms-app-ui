@@ -1,11 +1,5 @@
 // Shared components
-export * from './button.component';
-export * from './loader.component';
-export * from './confirm-dialog.component';
-export * from './profile-menu.component';
-
-// Shared services
-export * from './loader.service';
+export * from './components';
 
 // Shared interfaces
 export interface ConfirmDialogData {

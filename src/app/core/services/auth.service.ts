@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map, delay } from 'rxjs/operators';
-import { RedirectService } from '../core/redirect.service';
+import { RedirectService } from './redirect.service';
 
 export interface AuthResult {
   success: boolean;

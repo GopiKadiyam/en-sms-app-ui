@@ -1,12 +1,12 @@
 import { Component, inject, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { AuthService } from '../../auth/auth.service';
-import { ProfileMenuComponent } from '../../shared/profile-menu.component';
-import { RedirectService } from '../../core/redirect.service';
+import { AuthService } from '../../../core/services/auth.service';
+import { ProfileMenuComponent } from '../../../shared/components/profile-menu.component';
+import { RedirectService } from '../../../core/services/redirect.service';
 
 @Component({
-  selector: 'app-landing',
+  selector: 'app-home',
   standalone: true,
   imports: [CommonModule, ProfileMenuComponent],
   styles: [`
@@ -100,14 +100,14 @@ import { RedirectService } from '../../core/redirect.service';
             
             <ng-container *ngIf="isAuthenticated">
               <a 
-                href="/billing" 
+                href="/platform/billing" 
                 target="_blank"
                 class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
                 Go to Billing
               </a>
             </ng-container>
             <ng-container *ngIf="!isAuthenticated">
-              <a href="/billing" class="text-white hover:text-blue-200 transition-colors">Billing</a>
+              <a href="/platform/billing" class="text-white hover:text-blue-200 transition-colors">Billing</a>
             </ng-container>
             
             <!-- Auth Buttons -->
@@ -418,7 +418,7 @@ import { RedirectService } from '../../core/redirect.service';
     </footer>
   `
 })
-export class LandingComponent {
+export class HomeComponent {
   private auth = inject(AuthService);
   private router = inject(Router);
   private redirectService = inject(RedirectService);

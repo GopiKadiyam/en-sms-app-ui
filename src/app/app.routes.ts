@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
-import { authGuard } from './auth/auth.guard';
+import { authGuard } from './core/guards/auth.guard';
+import { ROUTE_CONSTANTS } from './core/constants/routes.constants';
 
 export const routes: Routes = [
   // Landing page
@@ -11,25 +12,42 @@ export const routes: Routes = [
   {
     path: 'home',
     pathMatch: 'full',
-    loadComponent: () => import('./features/landing/landing.component').then(m => m.LandingComponent),
+    loadComponent: () => import('./public/landing/home/home.component').then(m => m.HomeComponent),
   },
   
   // Auth routes (centralized)
   {
     path: 'auth/login',
-    loadComponent: () => import('./auth/login.component').then(m => m.LoginComponent),
+    loadComponent: () => import('./shared/components/login.component').then(m => m.LoginComponent),
   },
   {
     path: 'auth/signup',
-    loadComponent: () => import('./auth/login.component').then(m => m.LoginComponent),
+    loadComponent: () => import('./shared/components/login.component').then(m => m.LoginComponent),
   },
   {
     path: 'auth/forgot',
-    loadComponent: () => import('./auth/login.component').then(m => m.LoginComponent),
+    loadComponent: () => import('./shared/components/login.component').then(m => m.LoginComponent),
   },
   {
     path: 'auth/**',
     redirectTo: 'auth/login',
+  },
+  
+  // Unified Dashboard (protected)
+  {
+    path: 'dashboard',
+    canActivate: [authGuard],
+    loadComponent: () => import('./shared/components/layout-shell.component').then(m => m.LayoutShellComponent),
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./dashboard/unified/dashboard.component').then(m => m.DashboardComponent),
+      },
+      {
+        path: '**',
+        redirectTo: '',
+      }
+    ],
   },
   
   // Product Apps (protected)
@@ -39,7 +57,7 @@ export const routes: Routes = [
     children: [
       {
         path: 'messaging-hub',
-        loadComponent: () => import('./layout/layout-shell.component').then(m => m.LayoutShellComponent),
+        loadComponent: () => import('./shared/components/layout-shell.component').then(m => m.LayoutShellComponent),
         children: [
           {
             path: '',
@@ -48,15 +66,15 @@ export const routes: Routes = [
           },
           {
             path: 'dashboard',
-            loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent),
+            loadComponent: () => import('./dashboard/unified/dashboard.component').then(m => m.DashboardComponent),
           },
           {
             path: 'campaigns',
-            loadComponent: () => import('./features/campaigns/campaigns.component').then(m => m.CampaignsComponent),
+            loadComponent: () => import('./products/messaging-hub/campaigns/campaigns.component').then(m => m.CampaignsComponent),
           },
           {
             path: 'analytics',
-            loadComponent: () => import('./features/analytics/analytics.component').then(m => m.AnalyticsComponent),
+            loadComponent: () => import('./platform/analytics/cross-product/analytics.component').then(m => m.AnalyticsComponent),
           },
           {
             path: '**',
@@ -76,17 +94,34 @@ export const routes: Routes = [
     ]
   },
   
+  // Platform routes (protected)
+  {
+    path: 'platform',
+    canActivate: [authGuard],
+    children: [
+      {
+        path: 'billing',
+        loadComponent: () => import('./platform/billing/management/billing.component').then(m => m.BillingComponent),
+      },
+      {
+        path: 'users',
+        loadComponent: () => import('./platform/users/management/users.component').then(m => m.UsersComponent),
+      },
+      {
+        path: 'api-keys',
+        loadComponent: () => import('./platform/api-keys/management/api-keys.component').then(m => m.ApiKeysComponent),
+      },
+      {
+        path: 'analytics',
+        loadComponent: () => import('./platform/analytics/cross-product/analytics.component').then(m => m.AnalyticsComponent),
+      },
+    ]
+  },
+  
   // Public pages
   {
     path: 'pricing',
-    loadComponent: () => import('./features/pricing/pricing.component').then(m => m.PricingComponent),
-  },
-  
-  // Protected pages
-  {
-    path: 'billing',
-    canActivate: [authGuard],
-    loadComponent: () => import('./features/billing/billing.component').then(m => m.BillingComponent),
+    loadComponent: () => import('./public/pricing/page/pricing.component').then(m => m.PricingComponent),
   },
   
   // Catch all

@@ -1,7 +1,7 @@
 import { Component, inject, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { AuthService } from '../auth/auth.service';
+import { AuthService } from '../../core/services/auth.service';
 import { LucideAngularModule, User, Settings, LogOut, ChevronDown } from 'lucide-angular';
 import { ConfirmDialogComponent } from './confirm-dialog.component';
 

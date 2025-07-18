@@ -2,12 +2,12 @@ import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router, NavigationEnd } from '@angular/router';
-import { AuthService, AuthResult } from './auth.service';
-import { ButtonComponent } from '../shared/button.component';
+import { AuthService, AuthResult } from '../../core/services/auth.service';
+import { ButtonComponent } from './button.component';
 import { filter } from 'rxjs/operators';
-import { AuthApiService } from './auth-api.service';
-import { LoaderService } from '../shared/loader.service';
-import { RedirectService } from '../core/redirect.service';
+import { AuthApiService } from '../../core/services/auth-api.service';
+import { LoaderService } from './loader.service';
+import { RedirectService } from '../../core/services/redirect.service';
 
 // Stub for ToasterService (replace with real implementation if available)
 class ToasterService {

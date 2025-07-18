@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AuthService } from '../../auth/auth.service';
-import { ProfileMenuComponent } from '../../shared/profile-menu.component';
+import { AuthService } from '../../../core/services/auth.service';
+import { ProfileMenuComponent } from '../../../shared/components/profile-menu.component';
 
 @Component({
   selector: 'app-billing',

@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { AuthService } from './auth/auth.service';
+import { AuthService } from './core/services/auth.service';
 import { CommonModule } from '@angular/common';
 import { take } from 'rxjs/operators';
 import { Router, NavigationStart, RouterOutlet } from '@angular/router';
-import { LoaderComponent } from './shared/loader.component';
-import { RedirectService } from './core/redirect.service';
+import { LoaderComponent } from './shared/components/loader.component';
+import { RedirectService } from './core/services/redirect.service';
 import { APP_CONSTANTS } from './core';
 import { environment } from '../environments/environment';
 

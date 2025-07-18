@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { Router, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
-import { AuthService } from './auth.service';
-import { RedirectService } from '../core/redirect.service';
+import { AuthService } from '../services/auth.service';
+import { RedirectService } from '../services/redirect.service';
 
 export const authGuard = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot) => {
   const router = inject(Router);

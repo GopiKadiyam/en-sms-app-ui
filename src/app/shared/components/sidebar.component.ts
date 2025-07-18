@@ -2,12 +2,12 @@ import { Component } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { LucideAngularModule, Home, Users, Key, User, Sun, Moon, LogOut, Menu, Bell, Settings, ChevronDown, ChevronRight, Book, Lock, Database, Server, Share2, Map, Zap, Layers, Code, MessageCircle, Send, FileText, ListChecks, FolderKanban, AlertTriangle, FileWarning, Link2, ClipboardList, FileText as FileTextIcon, Palette, Star } from 'lucide-angular';
 import { CommonModule } from '@angular/common';
-import { ThemeService } from '../core/theme.service';
+import { ThemeService } from '../../core/services/theme.service';
 import { inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../auth/auth.service';
-import { ConfirmDialogComponent } from '../shared/confirm-dialog.component';
+import { AuthService } from '../../core/services/auth.service';
+import { ConfirmDialogComponent } from './confirm-dialog.component';
 // Types for navigation
 export type NavType = 'normal' | 'section' | 'group' | 'divider' | 'external' | 'badge' | 'custom' | 'submenu' | 'disabled' | 'linkWithAction';
 
