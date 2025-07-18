@@ -386,43 +386,61 @@ export class SidebarComponent {
   themeDropdownOpen = false;
 
   navItems: NavItem[] = [
-    { type: 'normal', title: 'Dashboard', icon: this.Home, route: '/dashboard', tooltip: 'Go to Dashboard' },
-    { type: 'divider' },
-    // { type: 'section', title: 'Management', icon: this.Users, children: [
-    //     { type: 'normal', title: 'Users', icon: this.Users, route: '/users', tooltip: 'Manage Users' },
-    //     { type: 'badge', title: 'Alerts', icon: this.Bell, route: '/alerts', tooltip: 'View Alerts', badgeCount: 5 },
-    //   ]
-    // },
-    { type: 'group', title: 'User Management', icon: this.Users, children: [
-        { type: 'normal', title: 'Users', icon: this.Users, route: '/users', tooltip: 'Manage Users' },
-        { type: 'normal', title: 'Api Keys', icon: this.Key, route: '/api-keys', tooltip: 'Api Keys' },
-      ]
+    {
+      type: 'normal',
+      title: 'Dashboard',
+      icon: Home,
+      route: '/products/messaging-hub/dashboard',
+      tooltip: 'Dashboard'
     },
-    { type: 'group', title: 'Message Configuration', icon: this.Database, children: [
-        { type: 'normal', title: 'Providers', icon: this.Server, route: '/api-keys', tooltip: 'Providers' },
-        { type: 'normal', title: 'SMSC', icon: this.Share2, route: '/smsc', tooltip: 'SMSC' },
-        { type: 'normal', title: 'User-SMSC Mapping', icon: this.Map, route: '/user-smsc-mapping', tooltip: 'User-SMSC Mapping' },
-        { type: 'normal', title: 'Tenant Webhook Registry', icon: this.Link2, route: '/tenant-webhook-registry', tooltip: 'Tenant Webhook Registry' },
-        { type: 'normal', title: 'Tenant Kafka Configuration', icon: this.Zap, route: '/tenant-kafka-mapping', tooltip: 'Tenant Kafka Configuration' },
-        { type: 'normal', title: 'Distribution Configuration', icon: this.Layers, route: '/distribution-config', tooltip: 'Distribution Configuration' },
-        { type: 'group', title: 'Error Code Mapping', icon: this.AlertTriangle, children: [
-          { type: 'normal', title: 'Application Error Codes', icon: this.FileWarning, route: '/app-error-codes', tooltip: 'Application Error Codes' },
-          { type: 'normal', title: 'Provider Error Codes', icon: this.FileWarning, route: '/provider-error-cdeos', tooltip: 'Provider Error Codes' },
-          { type: 'normal', title: 'Provider-Application ErrorCode Mapping ', icon: this.ClipboardList, route: '/user-smsc-mapping', tooltip: 'User-SMSC Mapping' },
-          ]
+    {
+      type: 'divider'
+    },
+    {
+      type: 'section',
+      title: 'Messaging',
+      icon: MessageCircle,
+      children: [
+        {
+          type: 'normal',
+          title: 'Campaigns',
+          icon: Send,
+          route: '/products/messaging-hub/campaigns',
+          tooltip: 'Manage campaigns'
         },
+        {
+          type: 'normal',
+          title: 'Analytics',
+          icon: FileText,
+          route: '/products/messaging-hub/analytics',
+          tooltip: 'View analytics'
+        }
       ]
     },
-    { type: 'group', title: 'Campaign Configuration', icon: this.MessageCircle, children: [
-      { type: 'normal', title: 'Senders', icon: this.Send, route: '/senders', tooltip: 'Senders' },
-      { type: 'normal', title: 'Templates', icon: this.FileTextIcon, route: '/templates', tooltip: 'Templates' },
-      { type: 'normal', title: 'Campaigns', icon: this.FolderKanban, route: '/campaigns', tooltip: 'Campaigns' },
-    ]
-  },
-    { type: 'external', title: 'Docs', icon: this.Book, externalUrl: 'https://docs.example.com', tooltip: 'Open Documentation' },
-    { type: 'disabled', title: 'Coming Soon', icon: this.Lock, tooltip: 'Feature coming soon', disabled: true },
-    // { type: 'linkWithAction', title: 'Log Out', icon: this.LogOut, action: () => this.logout(), tooltip: 'Log out of the app' },
-    // { type: 'custom', customComponent: MyCustomSidebarWidget }, // Example for custom
+    {
+      type: 'divider'
+    },
+    {
+      type: 'section',
+      title: 'Account',
+      icon: User,
+      children: [
+        {
+          type: 'external',
+          title: 'Billing',
+          icon: FileTextIcon,
+          externalUrl: '/billing',
+          tooltip: 'Manage billing'
+        },
+        {
+          type: 'external',
+          title: 'Pricing',
+          icon: Star,
+          externalUrl: '/pricing',
+          tooltip: 'View pricing'
+        }
+      ]
+    }
   ];
 
   openGroups: boolean[] = [];
@@ -452,16 +470,42 @@ export class SidebarComponent {
     this.router.navigate(['/auth/login']);
   }
 
-  // Add mock user data and profileActions array
-  user = {
-    name: 'Admin User',
-    email: 'admin@example.com',
-    role: 'Admin',
-    lastLogin: '2024-06-10 14:32',
-    tenant: 'EngageNest',
-    imageUrl: '', // Set to a real image URL to test avatar
-    status: 'Online',
-  };
+  get user() {
+    const token = this.auth.token;
+    if (token) {
+      try {
+        const payload = JSON.parse(atob(token));
+        return {
+          name: payload.name || payload.username || 'User',
+          email: payload.email || payload.username || 'user@example.com',
+          role: payload.role || 'User',
+          tenant: payload.tenant || 'Default',
+          lastLogin: payload.lastLogin || 'Today',
+          imageUrl: payload.avatar || null,
+          status: 'Online'
+        };
+      } catch {
+        return {
+          name: 'User',
+          email: 'user@example.com',
+          role: 'User',
+          tenant: 'Default',
+          lastLogin: 'Today',
+          imageUrl: null,
+          status: 'Online'
+        };
+      }
+    }
+    return {
+      name: 'User',
+      email: 'user@example.com',
+      role: 'User',
+      tenant: 'Default',
+      lastLogin: 'Today',
+      imageUrl: null,
+      status: 'Online'
+    };
+  }
 
   profileActions = [
     { label: 'View Profile', icon: this.User, action: () => this.viewProfile() },

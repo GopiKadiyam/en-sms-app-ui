@@ -7,6 +7,7 @@ import { ButtonComponent } from '../shared/button.component';
 import { filter } from 'rxjs/operators';
 import { AuthApiService } from './auth-api.service';
 import { LoaderService } from '../shared/loader.service';
+import { RedirectService } from '../core/redirect.service';
 
 // Stub for ToasterService (replace with real implementation if available)
 class ToasterService {
@@ -334,7 +335,8 @@ export class LoginComponent {
     private auth: AuthService, 
     private router: Router, 
     private api: AuthApiService,
-    private loaderService: LoaderService
+    private loaderService: LoaderService,
+    private redirectService: RedirectService
   ) {
     // Set mode based on route on init and on navigation
     this.router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe(() => {
@@ -385,7 +387,7 @@ export class LoginComponent {
         this.loaderService.hide();
         if (result.success) {
           this.loggedIn.emit();
-          this.router.navigate(['/app/dashboard']);
+          this.redirectService.handleSuccessfulLogin();
         } else if (result.mfaRequired) {
           this.mfaStep = true;
           this.mfaUsername = username;
@@ -414,7 +416,7 @@ export class LoginComponent {
         this.loaderService.hide();
         if (result.success) {
           this.loggedIn.emit();
-          this.router.navigate(['/app/dashboard']);
+          this.redirectService.handleSuccessfulLogin();
         } else {
           this.error = 'Invalid MFA code';
           this.toaster.show('Invalid MFA code', 'error');
@@ -439,7 +441,7 @@ export class LoginComponent {
         this.loaderService.hide();
         if (result.success) {
           this.loggedIn.emit();
-          this.router.navigate(['/app/dashboard']);
+          this.redirectService.handleSuccessfulLogin();
         } else {
           this.error = 'Invalid OTP or username';
           this.toaster.show('Invalid OTP or username', 'error');

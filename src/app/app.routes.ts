@@ -2,16 +2,19 @@ import { Routes } from '@angular/router';
 import { authGuard } from './auth/auth.guard';
 
 export const routes: Routes = [
-  {
-    path: 'home',
-    loadComponent: () => import('./features/home/home.component').then(m => m.HomeComponent),
-  },
+  // Landing page
   {
     path: '',
-    pathMatch: 'full',
     redirectTo: 'home',
+    pathMatch: 'full',
   },
-  // Auth routes
+  {
+    path: 'home',
+    pathMatch: 'full',
+    loadComponent: () => import('./features/landing/landing.component').then(m => m.LandingComponent),
+  },
+  
+  // Auth routes (centralized)
   {
     path: 'auth/login',
     loadComponent: () => import('./auth/login.component').then(m => m.LoginComponent),
@@ -28,33 +31,67 @@ export const routes: Routes = [
     path: 'auth/**',
     redirectTo: 'auth/login',
   },
+  
+  // Product Apps (protected)
   {
-    path: 'app',
-    loadComponent: () => import('./layout/layout-shell.component').then(m => m.LayoutShellComponent),
+    path: 'products',
     canActivate: [authGuard],
     children: [
       {
-        path: 'dashboard',
-        loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent),
+        path: 'messaging-hub',
+        loadComponent: () => import('./layout/layout-shell.component').then(m => m.LayoutShellComponent),
+        children: [
+          {
+            path: '',
+            redirectTo: 'dashboard',
+            pathMatch: 'full',
+          },
+          {
+            path: 'dashboard',
+            loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent),
+          },
+          {
+            path: 'campaigns',
+            loadComponent: () => import('./features/campaigns/campaigns.component').then(m => m.CampaignsComponent),
+          },
+          {
+            path: 'analytics',
+            loadComponent: () => import('./features/analytics/analytics.component').then(m => m.AnalyticsComponent),
+          },
+          {
+            path: '**',
+            redirectTo: 'dashboard',
+          }
+        ],
       },
-      {
-        path: 'users',
-        loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent),
-      },
-      {
-        path: 'operations',
-        redirectTo: 'dashboard',
-        pathMatch: 'full',
-      },
-      {
-        path: '**',
-        pathMatch: 'full',
-        redirectTo: 'dashboard',
-      }
-    ],
+      // Future product routes
+      // {
+      //   path: 'rcs-studio',
+      //   loadComponent: () => import('./products/rcs-studio/rcs-shell.component').then(m => m.RcsShellComponent),
+      // },
+      // {
+      //   path: 'whatsapp-business',
+      //   loadComponent: () => import('./products/whatsapp-business/whatsapp-shell.component').then(m => m.WhatsappShellComponent),
+      // },
+    ]
   },
+  
+  // Public pages
+  {
+    path: 'pricing',
+    loadComponent: () => import('./features/pricing/pricing.component').then(m => m.PricingComponent),
+  },
+  
+  // Protected pages
+  {
+    path: 'billing',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/billing/billing.component').then(m => m.BillingComponent),
+  },
+  
+  // Catch all
   {
     path: '**',
-    redirectTo: 'home',
+    redirectTo: '',
   },
 ]; 

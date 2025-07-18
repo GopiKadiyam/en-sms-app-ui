@@ -17,15 +17,16 @@ import { AuthService } from '../../auth/auth.service';
             <p class="text-gray-600 mt-1">Welcome to your EngageNest CPaaS dashboard</p>
           </div>
           <div class="flex items-center gap-4">
-            <div class="text-right">
+            <!-- <div class="text-right">
               <p class="text-sm text-gray-600">Logged in as</p>
               <p class="font-semibold text-gray-900">{{ userInfo?.name || userInfo?.username || 'User' }}</p>
+              <p class="text-xs text-gray-500">{{ userInfo?.role || 'User' }}</p>
             </div>
             <button 
               (click)="logout()"
               class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
               Logout
-            </button>
+            </button> -->
           </div>
         </div>
 
@@ -148,6 +149,6 @@ export class DashboardComponent {
 
   logout() {
     this.auth.logout();
-    this.router.navigate(['/home']);
+    this.router.navigate(['/']);
   }
 } 

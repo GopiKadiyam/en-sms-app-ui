@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { map, delay } from 'rxjs/operators';
+import { RedirectService } from '../core/redirect.service';
 
 export interface AuthResult {
   success: boolean;
@@ -13,13 +14,21 @@ export interface AuthResult {
 const MOCK_JWT = (user: any = { sub: 'admin@example.com', name: 'Admin User', role: 'Admin' }) => {
   // exp: 1 hour from now
   const exp = Math.floor(Date.now() / 1000) + 3600;
-  return btoa(JSON.stringify({ exp, ...user }));
+  return btoa(JSON.stringify({ 
+    exp, 
+    ...user,
+    email: user.sub || user.username,
+    tenant: user.tenant || 'EngageNest',
+    lastLogin: new Date().toISOString(),
+    avatar: user.avatar || null
+  }));
 };
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   private tokenKey = 'jwt_token';
   private authState$ = new BehaviorSubject<boolean>(this.hasValidToken());
+  private redirectService = inject(RedirectService);
 
   get isAuthenticated$(): Observable<boolean> {
     return this.authState$.asObservable();
@@ -37,11 +46,27 @@ export class AuthService {
       if (username === 'mfauser') {
         return of({ success: false, mfaRequired: true, user: { username } }).pipe(delay(800));
       }
-      const jwt = MOCK_JWT({ sub: username, name: 'Admin User', role: 'Admin' });
+      const jwt = MOCK_JWT({ 
+        sub: username, 
+        username: username,
+        name: 'Admin User', 
+        role: 'Admin',
+        email: `${username}@engagenest.com`,
+        tenant: 'EngageNest',
+        avatar: null
+      });
       this.setToken(jwt, rememberMe);
       return of({ success: true, token: jwt, user: { username, role: 'Admin' } }).pipe(delay(800));
     } else if (username === 'user' && password === 'user') {
-      const jwt = MOCK_JWT({ sub: username, name: 'Normal User', role: 'User' });
+      const jwt = MOCK_JWT({ 
+        sub: username, 
+        username: username,
+        name: 'Normal User', 
+        role: 'User',
+        email: `${username}@engagenest.com`,
+        tenant: 'EngageNest',
+        avatar: null
+      });
       this.setToken(jwt, rememberMe);
       return of({ success: true, token: jwt, user: { username, role: 'User' } }).pipe(delay(800));
     } else {
@@ -53,7 +78,15 @@ export class AuthService {
   loginWithMfa(username: string, otp: string, rememberMe: boolean): Observable<AuthResult> {
     // Dummy: OTP is always '123456' for demo
     if (otp === '123456') {
-      const jwt = MOCK_JWT({ sub: username, name: 'MFA User', role: 'Admin' });
+      const jwt = MOCK_JWT({ 
+        sub: username, 
+        username: username,
+        name: 'MFA User', 
+        role: 'Admin',
+        email: `${username}@engagenest.com`,
+        tenant: 'EngageNest',
+        avatar: null
+      });
       this.setToken(jwt, rememberMe);
       return of({ success: true, token: jwt, user: { username, role: 'Admin' } }).pipe(delay(800));
     } else {
@@ -65,7 +98,15 @@ export class AuthService {
   loginWithOtp(username: string, otp: string, rememberMe: boolean): Observable<AuthResult> {
     // Dummy: OTP is always '654321' for demo
     if (otp === '654321') {
-      const jwt = MOCK_JWT({ sub: username, name: 'OTP User', role: 'User' });
+      const jwt = MOCK_JWT({ 
+        sub: username, 
+        username: username,
+        name: 'OTP User', 
+        role: 'User',
+        email: `${username}@engagenest.com`,
+        tenant: 'EngageNest',
+        avatar: null
+      });
       this.setToken(jwt, rememberMe);
       return of({ success: true, token: jwt, user: { username, role: 'User' } }).pipe(delay(800));
     } else {
@@ -100,6 +141,9 @@ export class AuthService {
   }
 
   logout() {
+    // Store current URL before clearing token (for potential re-login)
+    this.redirectService.forceStoreCurrentUrl();
+    
     localStorage.removeItem(this.tokenKey);
     sessionStorage.removeItem(this.tokenKey);
     this.authState$.next(false);
