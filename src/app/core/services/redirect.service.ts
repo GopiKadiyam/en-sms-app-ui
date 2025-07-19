@@ -83,7 +83,7 @@ export class RedirectService {
   handleSuccessfulLogin(): void {
     const redirectUrl = this.getAndClearRedirectUrl();
     
-    if (redirectUrl && redirectUrl !== '/auth/login') {
+    if (redirectUrl && redirectUrl !== ROUTE_CONSTANTS.AUTH.LOGIN) {
       console.log(`[RedirectService] Redirecting to stored URL: ${redirectUrl}`);
       this.router.navigateByUrl(redirectUrl);
     } else {
@@ -107,7 +107,7 @@ export class RedirectService {
    */
   forceStoreCurrentUrl(): void {
     const currentUrl = this.router.url;
-    if (currentUrl && currentUrl !== '/auth/login') {
+    if (currentUrl && currentUrl !== ROUTE_CONSTANTS.AUTH.LOGIN) {
       sessionStorage.setItem(this.getTabKey(), currentUrl);
       console.log(`[RedirectService] Force stored redirect URL for tab ${this.tabId}: ${currentUrl}`);
     }
@@ -117,7 +117,7 @@ export class RedirectService {
    * Store a specific URL as the redirect URL (useful for AuthGuard)
    */
   storeSpecificUrl(url: string): void {
-    if (url && !url.includes('/auth/') && url !== '/auth/login') {
+    if (url && !url.includes('/auth/') && url !== ROUTE_CONSTANTS.AUTH.LOGIN) {
       sessionStorage.setItem(this.getTabKey(), url);
       console.log(`[RedirectService] Stored specific redirect URL for tab ${this.tabId}: ${url}`);
     }
